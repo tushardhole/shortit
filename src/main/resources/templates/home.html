@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+<div id="shortUrlForm">
+    <h2>Enter URL Details</h2>
+    <table>
+        <tr>
+            <td>Original URL</td>
+            <td><input type="text" id="url"></td>
+        </tr>
+        <tr id="urlError" style="display:none">
+            <td colspan="2">
+                <p><font color="red">Invalid URL!</font></p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="button" id="submit" value="Submit"/></td>
+        </tr>
+    </table>
+</div>
+<div id="resultDiv" style="display:none"><h2>Here is the short url..!!</h2>
+    <a id="shortUrl"></a>
+</div>
+<script>
+	jQuery(document).ready(function($) {
+
+		$("#submit").click(function(){
+			var urlDetails = {};
+			var base = window.location.origin;
+			urlDetails["url"] = $("#url").val();
+			$.ajax({
+				type : "POST",
+				contentType : "application/json",
+				url : base,
+				data : JSON.stringify(urlDetails),
+				dataType : 'text',
+				success : function(data) {
+					$('#shortUrl').attr("href",data);
+					$('#shortUrl').html(data);
+					$('#resultDiv').show();
+					$('#shortUrlForm').hide();
+				},
+				error: function(xhr, status, error){
+                  $('#urlError').show();
+                }
+			});
+		});
+	});
+
+</script>
+
+</body>
+</html>

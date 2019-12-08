@@ -1,0 +1,26 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'java'
+}
+
+group = 'com.sg.url'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+    implementation group: 'redis.clients', name: 'jedis', version: '3.1.0'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.2.1.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+    testImplementation 'org.mockito:mockito-core:3.2.0'
+}
