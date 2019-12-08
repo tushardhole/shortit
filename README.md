@@ -1,7 +1,12 @@
 # shortit
 URL shortening service
+# Prerequisite
+* docker
+* docker-compose
+
 
 # Installation
+* Make sure docker engine is running
 * Go to localenv directory
 * enter command 'docker-compose up'
 
