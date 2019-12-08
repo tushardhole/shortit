@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class URLRepositoryTest {
+public class ShortURLRepositoryTest {
 
     @Mock
     RedisTemplate redisTemplate;
@@ -25,7 +25,7 @@ public class URLRepositoryTest {
     @Mock
     HashOperations<String, String, String> hashOperations;
 
-    URLRepository urlRepository;
+    ShortURLRepository shortUrlRepository;
 
     @Before
     public void setUp() throws Exception {
@@ -33,19 +33,19 @@ public class URLRepositoryTest {
                 .thenReturn(valueOperations);
         when(redisTemplate.opsForHash())
                 .thenReturn(hashOperations);
-        urlRepository = new URLRepository(redisTemplate);
+        shortUrlRepository = new ShortURLRepository(redisTemplate);
     }
 
     @Test
     public void shouldSaveUrl() {
-        urlRepository.saveUrl("xyz", "abcd.com");
+        shortUrlRepository.saveUrl("xyz", "abcd.com");
         verify(hashOperations).put("1", "xyz", "abcd.com");
     }
 
     @Test
     public void shouldGetUrl() {
         when(hashOperations.get("1", "xyz")).thenReturn("abcd.com");
-        String url = urlRepository.getUrl("xyz");
+        String url = shortUrlRepository.getUrl("xyz").get();
         assertEquals("abcd.com", url);
         verify(hashOperations).get("1", "xyz");
     }
@@ -54,7 +54,7 @@ public class URLRepositoryTest {
     public void shouldGetNextID() {
         when(valueOperations.increment("pKeySequence")).thenReturn(1L);
 
-        long id = urlRepository.getNextID();
+        long id = shortUrlRepository.getNextID();
         assertEquals(1L, id);
     }
 }

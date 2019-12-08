@@ -18,8 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = TestRedisConfiguration.class)
 @AutoConfigureMockMvc
-public class TinyUrlApplicationTest {
-    @Autowired MockMvc mvc;
+public class ShortItApplicationTest {
+    @Autowired
+    MockMvc mvc;
 
     @Test
     public void urlToShortUrlAndGetBackFullUrl() throws Exception {
@@ -39,7 +40,13 @@ public class TinyUrlApplicationTest {
         mvc.perform(post("/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"url\" : \"abcd123com\"}"))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(is("Invalid url")));
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldNotProcessInvalidShortURL() throws Exception {
+        mvc.perform(get("http://localhost/invalid")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
