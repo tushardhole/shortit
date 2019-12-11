@@ -15,8 +15,8 @@ public class HashAdapterTest {
         Map<Long, String> expectedHash = new HashMap<>();
         expectedHash.put(1L, "b");
         expectedHash.put(2L, "c");
-        expectedHash.put((Long.MAX_VALUE - 1), "k9viXaIfiWg");
-        expectedHash.put(Long.MAX_VALUE, "k9viXaIfiWh");
+        expectedHash.put((Long.MAX_VALUE - 1), "gWifIaXiv9k");
+        expectedHash.put(Long.MAX_VALUE, "hWifIaXiv9k");
 
         expectedHash.forEach((k, v) -> {
             String generatedHash = hash.toHash(k);
