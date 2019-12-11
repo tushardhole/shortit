@@ -5,9 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+
+import java.time.Duration;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -22,32 +23,41 @@ public class ShortURLRepositoryTest {
     @Mock
     ValueOperations valueOperations;
 
-    @Mock
-    HashOperations<String, String, String> hashOperations;
-
     ShortURLRepository shortUrlRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         when(redisTemplate.opsForValue())
                 .thenReturn(valueOperations);
-        when(redisTemplate.opsForHash())
-                .thenReturn(hashOperations);
         shortUrlRepository = new ShortURLRepository(redisTemplate);
     }
 
     @Test
-    public void shouldSaveUrl() {
-        shortUrlRepository.saveUrl("xyz", "abcd.com");
-        verify(hashOperations).put("1", "xyz", "abcd.com");
+    public void shouldSaveUrlAndNeverExpire() {
+        shortUrlRepository.saveUrl("xyz", "abcd.com", -1);
+        verify(valueOperations).set("xyz", "abcd.com");
+    }
+
+    @Test
+    public void shouldSaveUrlAndExpireIn1Second() {
+        shortUrlRepository.saveUrl("xyz", "abcd.com", 1);
+        Duration oneSecond = Duration.ofSeconds(1);
+        verify(valueOperations).set("xyz", "abcd.com", oneSecond);
+    }
+
+    @Test
+    public void shouldSaveUrlAndExpireIn100Second() {
+        shortUrlRepository.saveUrl("xyz", "abcd.com", 100);
+        Duration hundredSecond = Duration.ofSeconds(100);
+        verify(valueOperations).set("xyz", "abcd.com", hundredSecond);
     }
 
     @Test
     public void shouldGetUrl() {
-        when(hashOperations.get("1", "xyz")).thenReturn("abcd.com");
+        when(valueOperations.get("xyz")).thenReturn("abcd.com");
         String url = shortUrlRepository.getUrl("xyz").get();
         assertEquals("abcd.com", url);
-        verify(hashOperations).get("1", "xyz");
+        verify(valueOperations).get("xyz");
     }
 
     @Test

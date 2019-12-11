@@ -17,10 +17,10 @@ public class ShortItService {
         this.hashAdapter = hashAdapter;
     }
 
-    public String processShortUrl(String fullURL) {
+    public String processShortUrl(String fullURL, long expiryInSeconds) {
         Long nextID = shortUrlRepository.getNextID();
         String hash = hashAdapter.toHash(nextID);
-        shortUrlRepository.saveUrl(hash, fullURL);
+        shortUrlRepository.saveUrl(hash, fullURL, expiryInSeconds);
         return hash;
     }
 

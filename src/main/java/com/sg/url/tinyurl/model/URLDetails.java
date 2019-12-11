@@ -10,8 +10,11 @@ public class URLDetails {
     @URL(message = "Invalid URL format")
     public final String url;
 
+    public final Long expiryInSeconds;
+
     @JsonCreator
-    public URLDetails(String url) {
+    public URLDetails(String url, Long expiryInSeconds) {
         this.url = url;
+        this.expiryInSeconds = expiryInSeconds;
     }
 }

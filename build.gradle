@@ -13,8 +13,8 @@ repositories {
 
 dependencies {
     implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
-    implementation group: 'redis.clients', name: 'jedis', version: '3.1.0'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.2.1.RELEASE'
+    implementation group: 'redis.clients', name: 'jedis'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

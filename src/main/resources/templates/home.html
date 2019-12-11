@@ -8,7 +8,7 @@
     <h2>Enter URL Details</h2>
     <table>
         <tr>
-            <td>Original URL</td>
+            <td>Original URL:</td>
             <td><input type="text" id="url"></td>
         </tr>
         <tr id="urlError" style="display:none">
@@ -17,20 +17,48 @@
             </td>
         </tr>
         <tr>
+            <td>Expiry in seconds(optional):</td>
+            <td><input type="text" id="expiryInSeconds"></td>
+        </tr>
+        <tr id="expiryInSecondsError" style="display:none">
+            <td colspan="2">
+                <p><font color="red">Invalid expiry in seconds</font></p>
+            </td>
+        </tr>
+        <tr>
             <td colspan="2"><input type="button" id="submit" value="Submit"/></td>
         </tr>
     </table>
 </div>
 <div id="resultDiv" style="display:none"><h2>Here is the short url..!!</h2>
-    <a id="shortUrl"></a>
+    <a id="shortUrl" target="_blank"></a>
+</div>
+<div id="refreshDiv" style="display:none">
+    <div></div>
+    <div></div>
+    <button id="refresh" style="background-color:ghostwhite;margin-top: 10px">Need, One more short url ?</button>
 </div>
 <script>
 	jQuery(document).ready(function($) {
+	   $('#refresh').click(function() {
+           location.reload(true);
+	   });
 
 		$("#submit").click(function(){
+		    $('#urlError').hide();
+		    $('#expiryInSecondsError').hide();
+
 			var urlDetails = {};
 			var base = window.location.origin;
 			urlDetails["url"] = $("#url").val();
+			var expiryInSeconds = $("#expiryInSeconds").val();
+
+			if(isNaN(expiryInSeconds)) {
+			    $('#expiryInSecondsError').show();
+			    return;
+			}
+
+            urlDetails["expiryInSeconds"] = expiryInSeconds;
 			$.ajax({
 				type : "POST",
 				contentType : "application/json",
@@ -41,6 +69,7 @@
 					$('#shortUrl').attr("href",data);
 					$('#shortUrl').html(data);
 					$('#resultDiv').show();
+					$('#refreshDiv').show();
 					$('#shortUrlForm').hide();
 				},
 				error: function(xhr, status, error){
@@ -49,6 +78,7 @@
 			});
 		});
 	});
+
 
 </script>
 

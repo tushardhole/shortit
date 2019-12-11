@@ -12,8 +12,12 @@ import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
+import static java.util.concurrent.TimeUnit.HOURS;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.OK;
@@ -33,15 +37,28 @@ public class ShortItControllerTest {
 
     @Test
     public void shouldGetShortURL() {
-        URLDetails urlDetails = new URLDetails("http://abc.com");
+        URLDetails urlDetails = new URLDetails("http://abc.com", -1L);
         when(request.getRequestURL()).thenReturn(new StringBuffer("localhost.com/"));
-        when(shortITService.processShortUrl("http://abc.com")).thenReturn("a");
+        when(shortITService.processShortUrl("http://abc.com", -1)).thenReturn("a");
 
         ResponseEntity<String> shortUrl = controller.getShortUrl(request, urlDetails);
 
         assertEquals(OK, shortUrl.getStatusCode());
         assertEquals("localhost.com/a", shortUrl.getBody());
-        verify(shortITService).processShortUrl("http://abc.com");
+        verify(shortITService).processShortUrl("http://abc.com", -1);
+    }
+
+    @Test
+    public void shouldCreateShortURLWithDefaultExpiryOf24Hours() {
+        URLDetails urlDetails = new URLDetails("http://abc.com", null);
+        when(request.getRequestURL()).thenReturn(new StringBuffer("localhost.com/"));
+        when(shortITService.processShortUrl("http://abc.com", HOURS.toSeconds(24))).thenReturn("a");
+
+        ResponseEntity<String> shortUrl = controller.getShortUrl(request, urlDetails);
+
+        assertEquals(OK, shortUrl.getStatusCode());
+        assertEquals("localhost.com/a", shortUrl.getBody());
+        verify(shortITService).processShortUrl("http://abc.com", 86400L);
     }
 
     @Test

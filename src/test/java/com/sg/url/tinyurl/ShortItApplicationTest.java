@@ -28,11 +28,29 @@ public class ShortItApplicationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"url\" : \"http://abcd123.com\"}"))
                 .andExpect(status().isOk())
+                .andExpect(content().string(is("http://localhost/c")));
+
+        mvc.perform(get("http://localhost/c"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(header().string("location", "http://abcd123.com"));
+    }
+
+    @Test
+    public void shouldNotGetShortURLAfterExpiry() throws Exception {
+        mvc.perform(post("/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"url\" : \"http://abcd123.com\", \"expiryInSeconds\": \"1\"}"))
+                .andExpect(status().isOk())
                 .andExpect(content().string(is("http://localhost/b")));
 
         mvc.perform(get("http://localhost/b"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("location", "http://abcd123.com"));
+
+        Thread.sleep(1000);
+
+        mvc.perform(get("http://localhost/b"))
+                .andExpect(status().isNotFound());
     }
 
     @Test

@@ -30,9 +30,9 @@ public class ShortItServiceTest {
         when(shortURLRepository.getNextID()).thenReturn(1L);
         when(hashAdapter.toHash(1L)).thenReturn("a");
 
-        String shortUrl = shortItService.processShortUrl("http://www.google.com");
+        String shortUrl = shortItService.processShortUrl("http://www.google.com", 10);
         assertEquals("a", shortUrl);
-        verify(shortURLRepository).saveUrl("a", "http://www.google.com");
+        verify(shortURLRepository).saveUrl("a", "http://www.google.com", 10);
     }
 
     @Test

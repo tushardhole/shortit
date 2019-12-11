@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @EnableAutoConfiguration
-public class TinyUrlApplication {
+public class ShortItApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TinyUrlApplication.class, args);
+        SpringApplication.run(ShortItApplication.class, args);
     }
 
 }
