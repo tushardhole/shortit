@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/tushardhole/shortit
+.svg?branch=master)](https://travis-ci.org/tushardhole/shortit
+)
 # shortit
 URL shortening service
 # Prerequisite
