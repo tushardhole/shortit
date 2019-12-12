@@ -6,9 +6,18 @@ URL shortening service
 
 
 # Installation
-* Make sure docker engine is running
-* Go to localenv directory
-* enter command 'docker-compose up'
+When docker is already installed:
+
+    * Make sure docker engine is running
+    * Go to localenv directory
+    * enter command 'docker-compose up'
+    
+When docker is not installed:
+
+    * Go to localenv directory
+    * run './run_server.sh'
+    
+run_server.sh will install docker and docker-compose after that start the shortit service. The script is Mac OS specific.
 
   Once docker containers are up,
     * Go to browser and open, http://localhost:8080

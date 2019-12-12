@@ -17,11 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import static java.util.Optional.ofNullable;
-import static java.util.concurrent.TimeUnit.HOURS;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
 
@@ -36,8 +31,7 @@ public class ShortItController {
 
     @PostMapping(value = "/", consumes = APPLICATION_JSON_VALUE, produces = TEXT_PLAIN_VALUE)
     public ResponseEntity<String> getShortUrl(HttpServletRequest request, @RequestBody @Valid URLDetails urlDetails) {
-        long expiry = ofNullable(urlDetails.expiryInSeconds).orElse(HOURS.toSeconds(24));
-        String shortUrl = request.getRequestURL() + shortITService.processShortUrl(urlDetails.url, expiry);
+        String shortUrl = request.getRequestURL() + shortITService.processShortUrl(urlDetails.url, urlDetails.expiryInSeconds);
         return new ResponseEntity<>(shortUrl, HttpStatus.OK);
     }
 

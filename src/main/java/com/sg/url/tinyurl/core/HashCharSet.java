@@ -3,9 +3,9 @@ package com.sg.url.tinyurl.core;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
-public class HashCharSet {
-    public static final char[] HASH_CHAR_SET = new char[62];
-    public static final HashMap<Character, Integer> HASH_CHAR_SET_INDEXES = new HashMap<>();
+class HashCharSet {
+    static final char[] HASH_CHAR_SET = new char[62];
+    static final HashMap<Character, Integer> HASH_CHAR_SET_INDEXES = new HashMap<>();
 
     static {
         initializeHashCharSet();
@@ -20,20 +20,16 @@ public class HashCharSet {
     }
 
     private static char getCharForIndex(int index) {
-        if (isAtoZRange(index)) {
-            return (char) ('A' + index - 26);
-        } else if (isNumericRange(index)) {
-            return (char) ('0' + index - 52);
-        } else {
-            return (char) ('a' + index);
-        }
-    }
+        var capitalAlphaFilter = IntStream.range(0, 25)
+                .filter(it -> it == index)
+                .map(it -> 'a' + it);
 
-    private static boolean isNumericRange(int index) {
-        return index >= 52;
-    }
+        var bigAlphaFilter = IntStream.range(26, 52)
+                .filter(it -> it == index)
+                .map(it -> 'A' + it - 26);
 
-    private static boolean isAtoZRange(int index) {
-        return index > 25 && index < 52;
+        return (char) bigAlphaFilter
+                .findFirst()
+                .orElse(capitalAlphaFilter.findFirst().orElse('0' + index - 52));
     }
 }
